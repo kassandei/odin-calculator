@@ -1,40 +1,48 @@
-const round = 5;
 let humanScore = 0;
 let computerScore = 0;
 
-function getHumanChoice() {
-    return prompt("Rock, Paper or Scissors?").toLocaleLowerCase();
-}
+
+let result = document.createElement("div");
+result.classList.add("result");
+document.body.appendChild(result);
+let buttons = document.querySelectorAll(".humanChoice button");
+buttons.forEach(button => 
+    button.addEventListener("click", () => {
+        playRound(button.textContent, getComputerChoice());
+    })
+)
+
 
 function getComputerChoice() {
-    let choice = Math.floor(Math.random() * 3);
-    switch(choice) {
-        case 0: 
-            return "Rock";
-        case 1:
-            return "Paper";
-        case 2:
-            return "Scissors";
-    }
+    let choice = ["Rock", "Paper", "Scissors"];
+    return choice[Math.floor(Math.random() * 3)];
 }
 
 function playRound(human, computer) {
-    if(human === "rock" && computer === "Scissors")
-        humanScore++;
-    else if(human === "paper" && computer === "rock")
-        humanScore++;
-    else if(human === "scissors" && computer === "paper")
-        humanScore++;
-    else if(human === computer.toLowerCase())
-        console.log("tie");
-    else
-        computerScore++;
-}
-function playGame() {
-    for(let i = 0; i < round; i++) 
-        playRound(getHumanChoice(), getComputerChoice());
+    switch (true) {
+        case human === "Rock" && computer === "Scissors":
+        case human === "Paper" && computer === "Rock":
+        case human === "Scissors" && computer === "Paper":
+            humanScore++;
+            console.log(`Human wins this round! ${human} beats ${computer}`);
+            break;
+        case human === computer:
+            console.log("It's a tie!");
+            break;
+        default:
+            computerScore++;
+            console.log(`Computer wins this round! ${computer} beats ${human}`);
+            break;
+    }
+    result.textContent = `RESULT: Human ${humanScore} - Computer ${computerScore}`;
+
+    console.log(`Human Score: ${humanScore}`);
+    console.log(`Computer Score: ${computerScore}`);
+
+    if(humanScore === 5) {
+        result.textContent = `The human win the game!`;
+        buttons.forEach(button => button.style.display = 'none');
+    }
 }
 
-playGame();
-console.log(humanScore);
-console.log(computerScore);
+

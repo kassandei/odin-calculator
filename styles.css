@@ -1,0 +1,21 @@
+body {
+    background-color: rgb(166, 166, 207);
+}
+.humanChoice {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    height: 40vh;
+}
+.humanChoice button {
+    width: 200px;
+    height: 100px;
+    border-radius: 4px;
+    font-size: 20px;
+    background-color: rgb(207, 128, 207);
+}
+.result {
+    display: flex;
+    justify-content: center;
+}
