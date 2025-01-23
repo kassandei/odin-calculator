@@ -1,48 +1,77 @@
 let humanScore = 0;
 let computerScore = 0;
 
+const resultDisplay = document.createElement("p");
+document.querySelector("#result").appendChild(resultDisplay);
 
-let result = document.createElement("div");
-result.classList.add("result");
-document.body.appendChild(result);
-let buttons = document.querySelectorAll(".humanChoice button");
-buttons.forEach(button => 
-    button.addEventListener("click", () => {
-        playRound(button.textContent, getComputerChoice());
+const humanImage = document.createElement("img");
+humanImage.src = 'imgs/question.png';
+document.querySelector("#choice").appendChild(humanImage);
+
+const computerImage = document.createElement("img");
+computerImage.src = 'imgs/question.png';
+document.querySelector("#choice").appendChild(computerImage);
+
+const humanChoices = document.querySelectorAll(".humanChoice img");
+humanChoices.forEach(choice => 
+    choice.addEventListener("click", () => {
+        playRound(choice.alt, getComputerChoice());
+        document.querySelector(".introduction").style.display = 'none';
     })
-)
-
+);
 
 function getComputerChoice() {
-    let choice = ["Rock", "Paper", "Scissors"];
-    return choice[Math.floor(Math.random() * 3)];
+    const choices = ["Rock", "Paper", "Scissors"];
+    return choices[Math.floor(Math.random() * 3)];
 }
 
-function playRound(human, computer) {
+function playRound(humanChoice, computerChoice) {
     switch (true) {
-        case human === "Rock" && computer === "Scissors":
-        case human === "Paper" && computer === "Rock":
-        case human === "Scissors" && computer === "Paper":
+        case humanChoice === "Rock" && computerChoice === "Scissors":
+        case humanChoice === "Paper" && computerChoice === "Rock":
+        case humanChoice === "Scissors" && computerChoice === "Paper":
             humanScore++;
-            console.log(`Human wins this round! ${human} beats ${computer}`);
+            resultDisplay.innerHTML = `Human wins this round! ${humanChoice} beats ${computerChoice}<br>`;
             break;
-        case human === computer:
-            console.log("It's a tie!");
+        case humanChoice === computerChoice:
+            resultDisplay.innerHTML = "It's a tie!<br>";
             break;
         default:
             computerScore++;
-            console.log(`Computer wins this round! ${computer} beats ${human}`);
+            resultDisplay.innerHTML = `Computer wins this round! ${computerChoice} beats ${humanChoice}<br>`;
             break;
     }
-    result.textContent = `RESULT: Human ${humanScore} - Computer ${computerScore}`;
+    resultDisplay.innerHTML += `Human ${humanScore} - Computer ${computerScore}`;
+    
+    humanImage.src = getPickImage(humanChoice);
+    computerImage.src = getPickImage(computerChoice);
+
+    humanImage.style.display = 'flex';
+    computerImage.style.display = 'flex';
 
     console.log(`Human Score: ${humanScore}`);
     console.log(`Computer Score: ${computerScore}`);
 
     if(humanScore === 5) {
-        result.textContent = `The human win the game!`;
-        buttons.forEach(button => button.style.display = 'none');
+        resultDisplay.innerHTML = `The human wins the game!`;
+        humanImage.style.display = 'none';
+        computerImage.style.display = 'none';
+        humanChoices.forEach(choice => choice.style.display = 'none');
+    } else if(computerScore === 5) {
+        resultDisplay.innerHTML = `The computer wins the game!`;
+        humanImage.style.display = 'none';
+        computerImage.style.display = 'none';
+        humanChoices.forEach(choice => choice.style.display = 'none');
     }
 }
 
-
+function getPickImage(choice) {
+    switch (choice) {
+        case "Rock":
+            return "imgs/rock.webp";
+        case "Paper":
+            return "imgs/paper.webp";
+        case "Scissors":
+            return "imgs/scissors.webp";
+    }
+}
